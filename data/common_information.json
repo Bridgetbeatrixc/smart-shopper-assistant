@@ -1,0 +1,112 @@
+[
+  {
+    "title": "Cara Membeli Produk",
+    "category": "purchase",
+    "question_examples": [
+      "Bagaimana cara membeli barang?",
+      "Apa langkah checkout produk?",
+      "Bagaimana cara membuat pesanan?"
+    ],
+    "content": "Untuk membeli produk, cari barang yang diinginkan, buka halaman produk, pilih variasi seperti warna atau ukuran jika tersedia, lalu tekan Tambah ke Keranjang atau Beli Sekarang. Periksa alamat pengiriman, metode pembayaran, voucher, dan ringkasan biaya sebelum menekan Buat Pesanan. Setelah pembayaran berhasil, pesanan akan masuk ke proses konfirmasi dan penjual menyiapkan barang.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Metode Pembayaran",
+    "category": "payment",
+    "question_examples": [
+      "Pembayaran bisa pakai apa?",
+      "Apakah bisa bayar transfer bank?",
+      "Bagaimana kalau pembayaran gagal?"
+    ],
+    "content": "Metode pembayaran yang umum tersedia meliputi transfer bank, virtual account, kartu debit atau kredit, dompet digital, dan pembayaran instan. Jika pembayaran gagal, user perlu memeriksa saldo, koneksi, batas waktu pembayaran, serta status transaksi di aplikasi pembayaran. Pesanan yang belum dibayar biasanya dapat dibayar ulang selama batas waktu belum berakhir.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Estimasi Pengiriman",
+    "category": "shipping",
+    "question_examples": [
+      "Berapa lama pengiriman reguler?",
+      "Kapan barang sampai?",
+      "Apa beda pengiriman reguler dan ekspres?"
+    ],
+    "content": "Estimasi pengiriman bergantung pada lokasi pembeli, lokasi penjual, jenis layanan kurir, dan waktu penjual menyerahkan paket. Pengiriman reguler umumnya membutuhkan sekitar 2 sampai 5 hari kerja untuk area dalam pulau atau kota besar, sedangkan pengiriman ekspres biasanya lebih cepat. Estimasi final sebaiknya dicek pada halaman checkout karena dihitung berdasarkan alamat dan layanan yang dipilih.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Pelacakan Pesanan",
+    "category": "tracking",
+    "question_examples": [
+      "Bagaimana melacak pesanan?",
+      "Nomor resi ada di mana?",
+      "Kenapa status pengiriman tidak berubah?"
+    ],
+    "content": "Pesanan dapat dilacak melalui menu Pesanan Saya, lalu pilih pesanan terkait untuk melihat status terbaru dan nomor resi. Status pengiriman bisa terlambat diperbarui karena sinkronisasi sistem kurir. Jika status tidak berubah lebih dari 2 hari kerja setelah paket dikirim, user dapat menghubungi layanan pelanggan dengan menyertakan nomor pesanan dan resi.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Refund Barang Rusak",
+    "category": "refund",
+    "question_examples": [
+      "Bagaimana cara refund kalau barang rusak?",
+      "Apakah uang kembali jika barang cacat?",
+      "Apa syarat pengembalian dana?"
+    ],
+    "content": "Refund untuk barang rusak dapat diajukan dari detail pesanan selama masih dalam periode komplain. User perlu memilih alasan barang rusak atau tidak sesuai, mengunggah bukti foto atau video unboxing, menjelaskan masalah, lalu menunggu verifikasi. Dana biasanya dikembalikan setelah klaim disetujui atau setelah barang retur diterima dan diperiksa, tergantung kebijakan transaksi.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Retur Barang",
+    "category": "return",
+    "question_examples": [
+      "Bagaimana cara retur barang?",
+      "Kalau ukuran tidak cocok bisa dikembalikan?",
+      "Apa syarat return?"
+    ],
+    "content": "Retur barang dapat diajukan jika produk memenuhi syarat pengembalian, misalnya rusak, tidak sesuai deskripsi, salah ukuran, atau salah produk. Produk sebaiknya belum digunakan berlebihan, masih memiliki kelengkapan seperti label dan kemasan bila memungkinkan, serta disertai bukti masalah. Untuk alasan berubah pikiran atau ukuran tidak cocok, ketersediaan retur mengikuti kebijakan toko dan kategori produk.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Pembatalan Pesanan",
+    "category": "cancellation",
+    "question_examples": [
+      "Bagaimana membatalkan pesanan?",
+      "Bisa cancel setelah bayar?",
+      "Kenapa pesanan tidak bisa dibatalkan?"
+    ],
+    "content": "Pesanan dapat dibatalkan dari halaman detail pesanan selama belum diproses terlalu jauh oleh penjual atau belum diserahkan ke kurir. Jika pesanan sudah dikemas atau dikirim, opsi pembatalan mungkin tidak tersedia. Untuk pesanan yang sudah dibayar dan berhasil dibatalkan, dana akan dikembalikan ke metode refund yang tersedia.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Garansi Produk",
+    "category": "warranty",
+    "question_examples": [
+      "Apakah produk ada garansi?",
+      "Bagaimana klaim garansi?",
+      "Apa syarat garansi elektronik?"
+    ],
+    "content": "Garansi produk bergantung pada kategori, merek, dan kebijakan penjual. Produk elektronik biasanya memiliki garansi toko atau garansi resmi dengan periode tertentu. Untuk klaim garansi, user perlu menyimpan bukti pembelian, kartu garansi jika ada, nomor seri produk, dan dokumentasi kerusakan. Kerusakan akibat penggunaan tidak sesuai panduan biasanya dapat ditolak.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Akun dan Alamat",
+    "category": "account",
+    "question_examples": [
+      "Bagaimana mengubah alamat?",
+      "Bisa ganti nomor HP akun?",
+      "Kenapa alamat tidak bisa dipilih?"
+    ],
+    "content": "Alamat pengiriman dapat dikelola melalui menu Akun atau Pengaturan Alamat. User dapat menambah, mengubah, atau memilih alamat utama sebelum checkout. Setelah pesanan dibuat, perubahan alamat mungkin tidak bisa dilakukan jika pesanan sudah diproses. Untuk perubahan nomor HP atau data akun, user perlu mengikuti verifikasi keamanan yang tersedia.",
+    "source": "SmartShopper Common Info Dataset"
+  },
+  {
+    "title": "Promo dan Voucher",
+    "category": "promo",
+    "question_examples": [
+      "Bagaimana memakai voucher?",
+      "Kenapa voucher tidak bisa digunakan?",
+      "Apakah promo bisa digabung?"
+    ],
+    "content": "Voucher dapat dipilih pada halaman checkout jika memenuhi syarat seperti minimum belanja, kategori produk, metode pembayaran, toko tertentu, atau periode promo. Voucher bisa tidak berlaku jika kuota habis, masa berlaku berakhir, produk tidak termasuk promo, atau sudah digunakan sebelumnya. Penggabungan voucher mengikuti aturan masing-masing promo.",
+    "source": "SmartShopper Common Info Dataset"
+  }
+]
