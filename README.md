@@ -1,16 +1,35 @@
 # Personalized SmartShopper Assistant
 
-Personalized SmartShopper Assistant adalah mini project AI Agent untuk konteks e-commerce. Agent dibuat dengan Google ADK, memiliki tool rekomendasi produk, dan tool Common Information berbasis RAG menggunakan MongoDB Atlas Vector Search.
+An AI agent for e-commerce built with Google ADK. It routes each customer question to the right tool: a product recommendation tool, and a Common Information tool that answers policy questions with RAG over MongoDB Atlas Vector Search. The agent answers in Indonesian.
 
-## Analisis Kebutuhan
+## How routing works
 
-Pertanyaan **product** adalah pertanyaan yang membutuhkan rekomendasi, pencarian, perbandingan, kategori, spesifikasi, budget, atau kecocokan produk. Contoh: `Rekomendasikan headphone untuk meeting di bawah 500 ribu`.
+**Product questions** need a recommendation, search, comparison, category, specs, budget or fit. Example: `Rekomendasikan headphone untuk meeting di bawah 500 ribu` ("Recommend headphones for meetings under 500k").
 
-Pertanyaan **common information** adalah pertanyaan umum seputar proses jual-beli, seperti pengiriman, cara pembelian, pembayaran, refund, retur, pembatalan, garansi, pelacakan pesanan, akun, promo, dan voucher. Contoh: `Bagaimana cara refund kalau barang rusak?`.
+**Common information questions** are about the buying process: shipping, how to buy, payment, refunds, returns, cancellations, warranty, order tracking, accounts, promos and vouchers. Example: `Bagaimana cara refund kalau barang rusak?` ("How do I get a refund if the item is damaged?").
 
-Jika user bertanya campuran, agent diarahkan untuk memakai kedua tool dan menggabungkan jawabannya.
+Mixed questions use both tools and combine the answers. The agent has two tools:
 
-## Struktur Project
+```python
+tools=[recommend_products, retrieve_common_information]
+```
+
+## Tools
+
+### Product recommendation: `recommend_products(query: str)`
+
+Uses a local demo catalogue. Returns recommended products, category, price, the reason for each recommendation, the detected budget and buying advice.
+
+### Common Information RAG: `retrieve_common_information(query: str)`
+
+1. Embed the user's query.
+2. Retrieve the most relevant documents with MongoDB Atlas `$vectorSearch`.
+3. Pass the retrieved documents to the generative model.
+4. Return the answer, category and source documents.
+
+If configuration is missing, the tool returns `configuration_required`. If retrieval is weak, it says the information isn't in the knowledge base rather than guessing.
+
+## Project structure
 
 ```text
 .
@@ -30,7 +49,7 @@ Jika user bertanya campuran, agent diarahkan untuk memakai kedua tool dan mengga
 
 ## Setup
 
-1. Buat virtual environment dan install dependency.
+1. Create a virtual environment and install dependencies:
 
 ```bash
 python -m venv .venv
@@ -38,7 +57,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-2. Buat file `.env` dari `.env.example`, lalu isi kredensial.
+2. Create `.env` from `.env.example` and fill in your credentials:
 
 ```env
 GOOGLE_API_KEY=your_google_api_key
@@ -50,27 +69,17 @@ EMBEDDING_MODEL=text-embedding-004
 GENERATION_MODEL=gemini-2.0-flash
 ```
 
-## Storing Data ke MongoDB Atlas
+## Storing data in MongoDB Atlas
 
-Dataset Common Information berada di `data/common_information.json`. Setiap item disimpan sebagai satu dokumen MongoDB dengan struktur:
+The Common Information dataset is in `data/common_information.json`. Each item is stored as one MongoDB document with `title`, `category` (such as `shipping`, `refund` or `promo`), `question_examples`, `content`, `source`, `embedding` and `updated_at`.
 
-- `title`: judul informasi.
-- `category`: kategori seperti `shipping`, `refund`, atau `promo`.
-- `question_examples`: contoh pertanyaan user.
-- `content`: isi knowledge base.
-- `source`: sumber dataset.
-- `embedding`: vector embedding untuk Atlas Vector Search.
-- `updated_at`: waktu penyimpanan terakhir.
-
-Jalankan seed script:
+Run the seed script:
 
 ```bash
 python scripts/seed_common_information.py
 ```
 
-Script akan membuat embedding untuk setiap dokumen, melakukan upsert berdasarkan `title` dan `category`, lalu mencetak definisi index Atlas Vector Search. Buat index tersebut di MongoDB Atlas dengan nama yang sama seperti `MONGODB_VECTOR_INDEX`.
-
-Contoh bentuk index yang dicetak:
+It embeds every document, upserts by `title` and `category`, and prints the Atlas Vector Search index definition. Create that index in MongoDB Atlas with the same name as `MONGODB_VECTOR_INDEX`. Example output:
 
 ```json
 {
@@ -89,75 +98,35 @@ Contoh bentuk index yang dicetak:
 }
 ```
 
-Nilai `numDimensions` mengikuti output model embedding yang digunakan.
+`numDimensions` follows the embedding model's output size.
 
-## Tools
+## Running the agent
 
-### Product Recommendation
-
-Function tool: `recommend_products(query: str)`
-
-Tool ini memakai katalog lokal untuk demo. Output berisi produk yang direkomendasikan, kategori, harga, alasan rekomendasi, budget yang terdeteksi, dan saran pembelian.
-
-### Common Information RAG
-
-Function tool: `retrieve_common_information(query: str)`
-
-Alur RAG:
-
-1. Query user diubah menjadi embedding.
-2. MongoDB Atlas `$vectorSearch` mengambil dokumen Common Information paling relevan.
-3. Dokumen hasil retrieval diberikan ke model generatif.
-4. Tool mengembalikan jawaban, kategori, dan sumber dokumen.
-
-Jika konfigurasi belum lengkap, tool mengembalikan status `configuration_required`. Jika hasil retrieval lemah, tool menjawab bahwa informasi belum tersedia di knowledge base.
-
-## Menjalankan Agent
-
-Agent utama ada di `src/smart_shopper/agent.py` dengan variable `root_agent`. Untuk menjalankan melalui ADK CLI:
+The main agent is `root_agent` in `src/smart_shopper/agent.py`. Run it with the ADK CLI:
 
 ```bash
 adk run smart_shopper
 ```
 
-Jika ADK CLI membutuhkan path eksplisit di environment lokal, jalankan dari root project setelah dependency terinstall dan pastikan `src` terbaca sebagai source package.
+If the ADK CLI needs an explicit path locally, run it from the project root after installing dependencies and make sure `src` is importable as a source package.
 
-## Routing Agent
+## Manual testing
 
-Agent menggunakan dua tool langsung:
+Try these prompts:
 
-```python
-tools=[recommend_products, retrieve_common_information]
-```
+- `Rekomendasikan headphone untuk meeting di bawah 500 ribu.` (product)
+- `Bagaimana cara refund kalau barang rusak?` (common information)
+- `Berapa lama pengiriman reguler?` (common information: regular shipping time)
+- `Saya mau beli powerbank, kalau barangnya tidak cocok bisa retur?` (mixed: buy a power bank, can I return it?)
 
-Prompt agent mengatur routing:
+Expected: product questions call `recommend_products`, general questions call `retrieve_common_information`, mixed questions call both, and answers stay in Indonesian without inventing information outside the tool context.
 
-- Product Recommendation untuk pertanyaan produk, spesifikasi, budget, kategori, dan rekomendasi.
-- Common Information untuk pengiriman, pembelian, pembayaran, refund, retur, pembatalan, garansi, tracking, akun, promo, dan voucher.
-- Pertanyaan campuran memakai kedua tool.
+## Tests
 
-## Pengujian Manual
-
-Gunakan prompt berikut untuk validasi:
-
-- `Rekomendasikan headphone untuk meeting di bawah 500 ribu.`
-- `Bagaimana cara refund kalau barang rusak?`
-- `Berapa lama pengiriman reguler?`
-- `Saya mau beli powerbank, kalau barangnya tidak cocok bisa retur?`
-
-Ekspektasi:
-
-- Pertanyaan produk memanggil `recommend_products`.
-- Pertanyaan umum memanggil `retrieve_common_information`.
-- Pertanyaan campuran memanggil kedua tool.
-- Jawaban tetap dalam Bahasa Indonesia dan tidak mengarang informasi di luar context tool.
-
-## Test
-
-Test lokal tidak membutuhkan MongoDB Atlas atau Google API key.
+The local tests don't need MongoDB Atlas or a Google API key.
 
 ```bash
 pytest
 ```
 
-Test mencakup validasi schema dataset, rekomendasi produk berbasis budget/kategori, dan respons konfigurasi Common Information ketika `.env` belum diisi.
+They cover dataset schema validation, budget- and category-based recommendations, and the Common Information configuration response when `.env` is empty.
